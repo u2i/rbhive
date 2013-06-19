@@ -48,10 +48,11 @@ module RBHive
         @logger.info("Initializing transport with SASL support")
         @transport = Thrift::SaslClientTransport.new(@socket, sasl_params)
         @sasl_params = case sasl_params
-                       when Hash then sasl_params.symbolize_keys
-                       when Hashie::Mash then sasl_params.to_hash(symbolize_keys: true)
+                       when Hash then sasl_params.inject({}){|memo,(k,v)| memo[k.to_sym] = v; memo}
+                       when Hashie::Mash then sasl_params.to_hash(:symbolize_keys => true)
                        else nil
                        end
+        @transport = Thrift::SaslClientTransport.new(@socket, @sasl_params)
       else
         @transport = Thrift::BufferedTransport.new(@socket)
       end
@@ -89,6 +90,10 @@ module RBHive
 
     def execute(query)
       execute_safe(query)
+    end
+
+    def explain(query)
+      ExplainResult.new(fetch("explain " + query).map { |row| row[:Explain] })
     end
 
     def priority=(priority)
@@ -160,21 +165,21 @@ module RBHive
     end
 
     def prepare_close_session
-      TCloseSessionReq.new( sessionHandle: self.session )
+      TCloseSessionReq.new( :sessionHandle => self.session )
     end
 
     def prepare_execute_statement(query)
-      TExecuteStatementReq.new( sessionHandle: self.session, statement: query.to_s )
+      TExecuteStatementReq.new( :sessionHandle => self.session, :statement => query.to_s )
     end
 
     def prepare_fetch_results(handle, orientation=:first, rows=100)
       orientation = orientation.to_s.upcase
       orientation = 'FIRST' unless TFetchOrientation::VALID_VALUES.include?( "FETCH_#{orientation}" )
-      TFetchResultsReq.new( operationHandle: handle, orientation: eval("TFetchOrientation::FETCH_#{orientation}"), maxRows: rows )
+      TFetchResultsReq.new( :operationHandle => handle, :orientation => eval("TFetchOrientation::FETCH_#{orientation}"), :maxRows => rows )
     end
 
     def get_schema_for(handle)
-      req = TGetResultSetMetadataReq.new( operationHandle: handle )
+      req = TGetResultSetMetadataReq.new( :operationHandle => handle )
       metadata = client.GetResultSetMetadata( req )
       metadata.schema
     end

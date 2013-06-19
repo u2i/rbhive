@@ -1,11 +1,11 @@
 Gem::Specification.new do |s|
   s.name = "rbhive"
-  s.version = "0.3.0"
-  s.authors = ["Forward Internet Group","KolobocK"]
-  s.date = %q{2013-06-14}
+  s.version = "0.3.0.1"
+  s.authors = ["Forward Internet Group","KolobocK", "p5k6"]
+  s.date = %q{2013-07-03}
   s.description = "Simple lib for executing Hive queries"
-  s.summary = "Simple lib for executing Hive queries"
-  s.email = ["andy@forward.co.uk","kolobock@gmail.com"]
+  s.summary = "Simple lib for executing Hive queries. This is a 1.8.7 backport with some custom LivingSocial extensions built in."
+  s.email = ["josh.stanfield@livingsocial.com"]
   s.files = [
     "lib/rbhive.rb",
     "lib/rbhive/connection.rb",
@@ -36,9 +36,9 @@ Gem::Specification.new do |s|
     "lib/thrift/t_c_l_i_service_types.rb",
     "lib/thrift/sasl_client_transport.rb",
   ]
-  s.homepage = %q{http://github.com/forward/rbhive}
+  s.homepage = %q{http://github.com/livingsocial/rbhive}
   s.require_paths = ["lib"]
   s.rubygems_version = "1.3.5"
-  s.add_dependency('thrift', '>= 0.4.0')
+  s.add_dependency('thrift', '>= 0.9.0')
   s.add_dependency('json')
 end

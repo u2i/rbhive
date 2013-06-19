@@ -6,11 +6,11 @@ module Thrift
     PAYLOAD_LENGTH_BYTES = 4
     AUTH_MECHANISM = 'PLAIN'
     NEGOTIATION_STATUS = {
-      START:    0x01,
-      OK:       0x02,
-      BAD:      0x03,
-      ERROR:    0x04,
-      COMPLETE: 0x05
+      :START =>    0x01,
+      :OK =>       0x02,
+      :BAD =>      0x03,
+      :ERROR =>    0x04,
+      :COMPLETE => 0x05
     }
 
     def initialize(transport, sasl_params={})
