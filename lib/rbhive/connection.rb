@@ -37,7 +37,7 @@ module RBHive
       @protocol = Thrift::BinaryProtocol.new(@transport)
       @client = Hive::Thrift::ThriftHive::Client.new(@protocol)
       @logger = logger
-      @logger.info("Connecting to #{server} on port #{port}")
+      @logger.info("#{Time.now}: Connecting to #{server} on port #{port}")
       @mutex = Mutex.new
     end
 
